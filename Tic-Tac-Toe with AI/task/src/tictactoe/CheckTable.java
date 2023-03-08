@@ -1,47 +1,37 @@
 package tictactoe;
 
-class CheckTable {
+public class CheckTable {
 
-    int sequenceRowX;
-    int sequenceRowO;
-    int sequenceColumnX;
-    int sequenceColumnO;
-    boolean tableHas2X;
-    boolean tableHas2O;
     boolean tableHas3X;
     boolean tableHas3O;
+    private boolean tableHas2X;
+    private boolean tableHas2O;
+    private int sequenceRowX;
+    private int sequenceRowO;
+    private int sequenceColumnX;
+    private int sequenceColumnO;
     private boolean sequenceRowXSet;
     private boolean sequenceRowOSet;
 
-    void checkLines(Cell[][] field) {
-        resetSequenceCoordinates();
-        checkRows(field);
+    public CheckTable(Cell[][] grid) {
+        checkRows(grid);
 
         if (!tableHas2X && !tableHas2O) {
-            checkColumns(field);
+            checkColumns(grid);
         }
 
         if (!tableHas2X && !tableHas2O) {
-            checkTopLeftDiagonal(field);
+            checkTopLeftDiagonal(grid);
         }
 
         if (!tableHas2X && !tableHas2O) {
-            checkTopRightDiagonal(field);
+            checkTopRightDiagonal(grid);
         }
     }
 
-    private void resetSequenceCoordinates() {
-        tableHas2X = false;
-        tableHas2O = false;
-        tableHas3X = false;
-        tableHas3O = false;
-        sequenceRowXSet = false;
-        sequenceRowOSet = false;
-    }
-
-    private void checkRows(Cell[][] field) {
-        for (int i = 0; i < Table.FIELD_SIZE; i++) {
-            String currentRow = field[i][0].label + field[i][1].label + field[i][2].label;
+    private void checkRows(Cell[][] grid) {
+        for (int i = 0; i < Table.GRID_SIZE; i++) {
+            String currentRow = grid[i][0].label + grid[i][1].label + grid[i][2].label;
             checkSequences(currentRow);
             int emptyCellCoordinate = currentRow.indexOf(' ');
 
@@ -57,9 +47,21 @@ class CheckTable {
         }
     }
 
-    private void checkColumns(Cell[][] field) {
-        for (int i = 0; i < Table.FIELD_SIZE; i++) {
-            String currentColumn = field[0][i].label + field[1][i].label + field[2][i].label;
+    private void checkSequences(String sequence) {
+        if ("XXX".equals(sequence)) {
+            tableHas3X = true;
+        } else if ("OOO".equals(sequence)) {
+            tableHas3O = true;
+        } else if (sequence.matches("XX ")) {
+            tableHas2X = true;
+        } else if (sequence.matches("OO ")) {
+            tableHas2O = true;
+        }
+    }
+
+    private void checkColumns(Cell[][] grid) {
+        for (int i = 0; i < Table.GRID_SIZE; i++) {
+            String currentColumn = grid[0][i].label + grid[1][i].label + grid[2][i].label;
             checkSequences(currentColumn);
             int emptyCellCoordinate = currentColumn.indexOf(' ');
 
@@ -75,8 +77,8 @@ class CheckTable {
         }
     }
 
-    private void checkTopLeftDiagonal(Cell[][] field) {
-        String topLeftDiagonal = field[0][0].label + field[1][1].label + field[2][2].label;
+    private void checkTopLeftDiagonal(Cell[][] grid) {
+        String topLeftDiagonal = grid[0][0].label + grid[1][1].label + grid[2][2].label;
         checkSequences(topLeftDiagonal);
         int emptyCellCoordinate = topLeftDiagonal.indexOf(' ');
 
@@ -89,8 +91,8 @@ class CheckTable {
         }
     }
 
-    private void checkTopRightDiagonal(Cell[][] field) {
-        String topRightDiagonal = field[0][2].label + field[1][1].label + field[2][0].label;
+    private void checkTopRightDiagonal(Cell[][] grid) {
+        String topRightDiagonal = grid[0][2].label + grid[1][1].label + grid[2][0].label;
         checkSequences(topRightDiagonal);
         int emptyCellCoordinate = topRightDiagonal.indexOf(' ');
 
@@ -101,7 +103,7 @@ class CheckTable {
                 case 0 -> 2;
                 case 1 -> 1;
                 case 2 -> 0;
-                default -> throw new IllegalStateException("Unexpected value: " + emptyCellCoordinate);
+                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + emptyCellCoordinate);
             };
         } else if (tableHas2O) {
             sequenceRowO = emptyCellCoordinate;
@@ -110,20 +112,32 @@ class CheckTable {
                 case 0 -> 2;
                 case 1 -> 1;
                 case 2 -> 0;
-                default -> throw new IllegalStateException("Unexpected value: " + emptyCellCoordinate);
+                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + emptyCellCoordinate);
             };
         }
     }
 
-    private void checkSequences(String sequence) {
-        if ("XXX".equals(sequence)) {
-            tableHas3X = true;
-        } else if ("OOO".equals(sequence)) {
-            tableHas3O = true;
-        } else if (sequence.matches("XX ")) {
-            tableHas2X = true;
-        } else if (sequence.matches("OO ")) {
-            tableHas2O = true;
-        }
+    public boolean isTableHas2X() {
+        return tableHas2X;
+    }
+
+    public boolean isTableHas2O() {
+        return tableHas2O;
+    }
+
+    public int getSequenceRowX() {
+        return sequenceRowX;
+    }
+
+    public int getSequenceRowO() {
+        return sequenceRowO;
+    }
+
+    public int getSequenceColumnX() {
+        return sequenceColumnX;
+    }
+
+    public int getSequenceColumnO() {
+        return sequenceColumnO;
     }
 }

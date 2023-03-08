@@ -1,8 +1,8 @@
 package tictactoe;
 
-enum Cell {
+public enum Cell {
     CROSS("X"),
-    NOUGHT("O"),
+    ZERO("O"),
     EMPTY(" ");
 
     final String label;

@@ -1,22 +1,29 @@
 package tictactoe;
 
-class Minimax {
+public class Minimax {
 
-    int bestRow;
-    int bestColumn;
+    private final Cell[][] grid;
+    private int bestRow;
+    private int bestColumn;
     private Cell maxPlayer;
     private Cell minPlayer;
-    private final Cell[][] field;
-
-    Minimax(Cell[][] field) {
-        this.field = field.clone();
+    public Minimax(Cell[][] grid) {
+        this.grid = grid.clone();
     }
 
-    void findBestMove(Cell player) {
+    public int getBestRow() {
+        return bestRow;
+    }
+
+    public int getBestColumn() {
+        return bestColumn;
+    }
+
+    public void findBestMove(Cell player) {
         maxPlayer = player;
 
         if (maxPlayer == Cell.CROSS) {
-            minPlayer = Cell.NOUGHT;
+            minPlayer = Cell.ZERO;
         } else {
             minPlayer = Cell.CROSS;
         }
@@ -33,18 +40,18 @@ class Minimax {
             return move;
         }
 
-        if (!Table.hasEmptyCells(field)) {
+        if (!Table.hasEmptyCells(grid)) {
             return move;
         }
 
         int bestScore = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        for (int i = 0; i < Table.FIELD_SIZE; i++) {
-            for (int j = 0; j < Table.FIELD_SIZE; j++) {
-                if (field[i][j] == Cell.EMPTY) {
-                    field[i][j] = maximizingPlayer ? maxPlayer : minPlayer;
+        for (int i = 0; i < Table.GRID_SIZE; i++) {
+            for (int j = 0; j < Table.GRID_SIZE; j++) {
+                if (grid[i][j] == Cell.EMPTY) {
+                    grid[i][j] = maximizingPlayer ? maxPlayer : minPlayer;
                     int score = maximizingPlayer ? maximize(minPlayer, false).score : maximize(maxPlayer, true).score;
-                    field[i][j] = Cell.EMPTY;
+                    grid[i][j] = Cell.EMPTY;
 
                     if (maximizingPlayer ? (score > bestScore) : (score < bestScore)) {
                         bestScore = score;
@@ -60,8 +67,7 @@ class Minimax {
     }
 
     private int evaluateTable(Cell player) {
-        CheckTable checkTable = new CheckTable();
-        checkTable.checkLines(field);
+        CheckTable checkTable = new CheckTable(grid);
 
         if (player == Cell.CROSS) {
             if (checkTable.tableHas3X) {
