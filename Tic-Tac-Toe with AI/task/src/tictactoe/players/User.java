@@ -6,12 +6,15 @@ import tictactoe.UI;
 
 public class User extends AbstractPlayer {
 
-    public User(Cell[][] grid) {
+    private final UI ui;
+
+    public User(Cell[][] grid, UI ui) {
         super(grid);
+        this.ui = ui;
     }
 
     @Override
     public TargetCoordinates makeCoordinates() {
-        return UI.readCoordinates(grid);
+        return ui.readCoordinates(grid);
     }
 }

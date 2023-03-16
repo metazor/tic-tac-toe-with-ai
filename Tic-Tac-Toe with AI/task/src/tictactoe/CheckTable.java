@@ -2,8 +2,8 @@ package tictactoe;
 
 public class CheckTable {
 
-    boolean tableHas3X;
-    boolean tableHas3O;
+    private boolean tableHas3X;
+    private boolean tableHas3O;
     private boolean tableHas2X;
     private boolean tableHas2O;
     private int sequenceRowX;
@@ -31,7 +31,7 @@ public class CheckTable {
 
     private void checkRows(Cell[][] grid) {
         for (int i = 0; i < Table.GRID_SIZE; i++) {
-            String currentRow = grid[i][0].label + grid[i][1].label + grid[i][2].label;
+            String currentRow = grid[i][0].getLabel() + grid[i][1].getLabel() + grid[i][2].getLabel();
             checkSequences(currentRow);
             int emptyCellCoordinate = currentRow.indexOf(' ');
 
@@ -61,7 +61,7 @@ public class CheckTable {
 
     private void checkColumns(Cell[][] grid) {
         for (int i = 0; i < Table.GRID_SIZE; i++) {
-            String currentColumn = grid[0][i].label + grid[1][i].label + grid[2][i].label;
+            String currentColumn = grid[0][i].getLabel() + grid[1][i].getLabel() + grid[2][i].getLabel();
             checkSequences(currentColumn);
             int emptyCellCoordinate = currentColumn.indexOf(' ');
 
@@ -78,7 +78,7 @@ public class CheckTable {
     }
 
     private void checkTopLeftDiagonal(Cell[][] grid) {
-        String topLeftDiagonal = grid[0][0].label + grid[1][1].label + grid[2][2].label;
+        String topLeftDiagonal = grid[0][0].getLabel() + grid[1][1].getLabel() + grid[2][2].getLabel();
         checkSequences(topLeftDiagonal);
         int emptyCellCoordinate = topLeftDiagonal.indexOf(' ');
 
@@ -92,7 +92,7 @@ public class CheckTable {
     }
 
     private void checkTopRightDiagonal(Cell[][] grid) {
-        String topRightDiagonal = grid[0][2].label + grid[1][1].label + grid[2][0].label;
+        String topRightDiagonal = grid[0][2].getLabel() + grid[1][1].getLabel() + grid[2][0].getLabel();
         checkSequences(topRightDiagonal);
         int emptyCellCoordinate = topRightDiagonal.indexOf(' ');
 
@@ -117,11 +117,19 @@ public class CheckTable {
         }
     }
 
-    public boolean isTableHas2X() {
+    public boolean has3X() {
+        return tableHas3X;
+    }
+
+    public boolean has3O() {
+        return tableHas3O;
+    }
+
+    public boolean has2X() {
         return tableHas2X;
     }
 
-    public boolean isTableHas2O() {
+    public boolean has2O() {
         return tableHas2O;
     }
 

@@ -25,9 +25,6 @@ public class EasyAI extends AbstractPlayer {
             randomColumn = random.nextInt(Table.GRID_SIZE);
         }
 
-        TargetCoordinates targetCoordinates = new TargetCoordinates();
-        targetCoordinates.setRow(randomRow);
-        targetCoordinates.setColumn(randomColumn);
-        return targetCoordinates;
+        return new TargetCoordinates(randomRow, randomColumn);
     }
 }

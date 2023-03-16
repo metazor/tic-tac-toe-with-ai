@@ -11,11 +11,13 @@ class Game {
     private static final int FIRST_PLAYER = 1;
     private static final int SECOND_PLAYER = 2;
     private final Table table;
+    private final UI ui;
     private boolean currentRoundIsX = true;
 
-    Game(Table table) {
+    Game(Table table, UI ui) {
         this.table = table;
-        UI.printTable(table.grid);
+        this.ui = ui;
+        ui.printTable(table.getGrid());
     }
 
     void runGame(String[] command) {
@@ -31,33 +33,37 @@ class Game {
             }
 
             makeMove(command[currentPlayer]);
-            UI.printTable(table.grid);
-            checkTable = new CheckTable(table.grid);
+            ui.printTable(table.getGrid());
+            checkTable = new CheckTable(table.getGrid());
             currentRoundIsX = !currentRoundIsX;
-        } while (!(checkTable.tableHas3X || checkTable.tableHas3O || !Table.hasEmptyCells(table.grid)));
+        } while (!(checkTable.has3X() || checkTable.has3O() || !Table.hasEmptyCells(table.getGrid())));
 
-        if (checkTable.tableHas3X) {
-            UI.printEndMessage("x wins");
-        } else if (checkTable.tableHas3O) {
-            UI.printEndMessage("o wins");
-        } else if (!Table.hasEmptyCells(table.grid)) {
-            UI.printEndMessage("draw");
-        }
+        printEndMessage(checkTable);
     }
 
     private void makeMove(String playerType) {
         TargetCoordinates targetCoordinates = switch (playerType) {
-            case "user" -> new User(table.grid).makeCoordinates();
-            case "easy" -> new EasyAI(table.grid).makeCoordinates();
-            case "medium" -> new MediumAI(table.grid, currentRoundIsX).makeCoordinates();
-            case "hard" -> new HardAI(table.grid, currentRoundIsX).makeCoordinates();
+            case "user" -> new User(table.getGrid(), ui).makeCoordinates();
+            case "easy" -> new EasyAI(table.getGrid()).makeCoordinates();
+            case "medium" -> new MediumAI(table.getGrid(), currentRoundIsX).makeCoordinates();
+            case "hard" -> new HardAI(table.getGrid(), currentRoundIsX).makeCoordinates();
             default -> throw new IllegalStateException(UNEXPECTED_VALUE + playerType);
         };
 
         if (!"user".equals(playerType)) {
-            UI.printMakingMoveMessage(playerType);
+            ui.printMakingMoveMessage(playerType);
         }
 
         table.addMarkToTargetCell(targetCoordinates, currentRoundIsX);
+    }
+
+    private void printEndMessage(CheckTable checkTable) {
+        if (checkTable.has3X()) {
+            ui.printMessage("x wins");
+        } else if (checkTable.has3O()) {
+            ui.printMessage("o wins");
+        } else if (!Table.hasEmptyCells(table.getGrid())) {
+            ui.printMessage("draw");
+        }
     }
 }
