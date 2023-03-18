@@ -1,52 +1,63 @@
 package tictactoe;
 
 import tictactoe.players.EasyAI;
-import tictactoe.players.HardAI;
 import tictactoe.players.MediumAI;
+import tictactoe.players.minimax.HardAI;
 import tictactoe.players.User;
 
-class Game {
+import java.util.Arrays;
 
+public class Game {
+
+    public static final int GRID_SIZE = 3;
     static final String UNEXPECTED_VALUE = "Unexpected value: ";
-    private static final int FIRST_PLAYER = 1;
-    private static final int SECOND_PLAYER = 2;
-    private final Table table;
     private final UI ui;
+    private final Cell[][] grid = new Cell[GRID_SIZE][GRID_SIZE];
     private boolean currentRoundIsX = true;
 
-    Game(Table table, UI ui) {
-        this.table = table;
+    Game(UI ui) {
         this.ui = ui;
-        ui.printTable(table.getGrid());
+
+        for (Cell[] cells : grid) {
+            Arrays.fill(cells, Cell.EMPTY);
+        }
+
+        ui.printTable(grid);
     }
 
     void runGame(String[] command) {
         CheckTable checkTable;
 
         do {
-            int currentPlayer;
-
-            if (currentRoundIsX) {
-                currentPlayer = FIRST_PLAYER;
-            } else {
-                currentPlayer = SECOND_PLAYER;
-            }
-
+            int currentPlayer = currentRoundIsX ? (PlayerOrder.FIRST_PLAYER.ordinal() + 1)
+                    : (PlayerOrder.SECOND_PLAYER.ordinal() + 1);
             makeMove(command[currentPlayer]);
-            ui.printTable(table.getGrid());
-            checkTable = new CheckTable(table.getGrid());
+            ui.printTable(grid);
+            checkTable = new CheckTable(grid);
             currentRoundIsX = !currentRoundIsX;
-        } while (!(checkTable.has3X() || checkTable.has3O() || !Table.hasEmptyCells(table.getGrid())));
+        } while (!(checkTable.has3X() || checkTable.has3O() || !hasEmptyCells(grid)));
 
         printEndMessage(checkTable);
     }
 
+    public static boolean hasEmptyCells(Cell[][] grid) {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                if (grid[i][j] == Cell.EMPTY) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void makeMove(String playerType) {
         TargetCoordinates targetCoordinates = switch (playerType) {
-            case "user" -> new User(table.getGrid(), ui).makeCoordinates();
-            case "easy" -> new EasyAI(table.getGrid()).makeCoordinates();
-            case "medium" -> new MediumAI(table.getGrid(), currentRoundIsX).makeCoordinates();
-            case "hard" -> new HardAI(table.getGrid(), currentRoundIsX).makeCoordinates();
+            case "user" -> new User(grid, ui).makeCoordinates();
+            case "easy" -> new EasyAI(grid).makeCoordinates();
+            case "medium" -> new MediumAI(grid, currentRoundIsX).makeCoordinates();
+            case "hard" -> new HardAI(grid, currentRoundIsX).makeCoordinates();
             default -> throw new IllegalStateException(UNEXPECTED_VALUE + playerType);
         };
 
@@ -54,7 +65,15 @@ class Game {
             ui.printMakingMoveMessage(playerType);
         }
 
-        table.addMarkToTargetCell(targetCoordinates, currentRoundIsX);
+        addMarkToTargetCell(targetCoordinates, currentRoundIsX);
+    }
+
+    private void addMarkToTargetCell(TargetCoordinates targetCoordinates, boolean currentRoundIsX) {
+        if (currentRoundIsX) {
+            grid[targetCoordinates.getRow()][targetCoordinates.getColumn()] = Cell.CROSS;
+        } else {
+            grid[targetCoordinates.getRow()][targetCoordinates.getColumn()] = Cell.ZERO;
+        }
     }
 
     private void printEndMessage(CheckTable checkTable) {
@@ -62,8 +81,12 @@ class Game {
             ui.printMessage("x wins");
         } else if (checkTable.has3O()) {
             ui.printMessage("o wins");
-        } else if (!Table.hasEmptyCells(table.getGrid())) {
+        } else if (!hasEmptyCells(grid)) {
             ui.printMessage("draw");
         }
+    }
+
+    private enum PlayerOrder {
+        FIRST_PLAYER, SECOND_PLAYER
     }
 }

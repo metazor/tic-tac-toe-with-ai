@@ -30,7 +30,7 @@ public class CheckTable {
     }
 
     private void checkRows(Cell[][] grid) {
-        for (int i = 0; i < Table.GRID_SIZE; i++) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
             String currentRow = grid[i][0].getLabel() + grid[i][1].getLabel() + grid[i][2].getLabel();
             checkSequences(currentRow);
             int emptyCellCoordinate = currentRow.indexOf(' ');
@@ -52,15 +52,15 @@ public class CheckTable {
             tableHas3X = true;
         } else if ("OOO".equals(sequence)) {
             tableHas3O = true;
-        } else if (sequence.matches("XX ")) {
+        } else if (sequence.matches(" ?X ?X ?")) {
             tableHas2X = true;
-        } else if (sequence.matches("OO ")) {
+        } else if (sequence.matches(" ?O ?O ?")) {
             tableHas2O = true;
         }
     }
 
     private void checkColumns(Cell[][] grid) {
-        for (int i = 0; i < Table.GRID_SIZE; i++) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
             String currentColumn = grid[0][i].getLabel() + grid[1][i].getLabel() + grid[2][i].getLabel();
             checkSequences(currentColumn);
             int emptyCellCoordinate = currentColumn.indexOf(' ');

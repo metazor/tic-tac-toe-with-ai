@@ -10,8 +10,7 @@ class Main {
             return;
         }
 
-        Table table = new Table();
-        Game game = new Game(table, ui);
+        Game game = new Game(ui);
         game.runGame(command.split(" "));
     }
 }

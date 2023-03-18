@@ -1,21 +1,22 @@
-package tictactoe.players;
+package tictactoe.players.minimax;
 
 import tictactoe.Cell;
 import tictactoe.CheckTable;
-import tictactoe.Move;
-import tictactoe.Table;
+import tictactoe.Game;
 import tictactoe.TargetCoordinates;
+import tictactoe.players.Player;
 
-public class HardAI extends AbstractPlayer {
+public class HardAI implements Player {
 
     private final boolean currentRoundIsX;
+    private final Cell[][] grid;
     private int bestRow;
     private int bestColumn;
     private Cell maxPlayer;
     private Cell minPlayer;
 
     public HardAI(Cell[][] grid, boolean currentRoundIsX) {
-        super(grid);
+        this.grid = grid;
         this.currentRoundIsX = currentRoundIsX;
     }
 
@@ -51,14 +52,14 @@ public class HardAI extends AbstractPlayer {
             return move;
         }
 
-        if (!Table.hasEmptyCells(grid)) {
+        if (!Game.hasEmptyCells(grid)) {
             return move;
         }
 
         int bestScore = maximizingPlayer ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        for (int i = 0; i < Table.GRID_SIZE; i++) {
-            for (int j = 0; j < Table.GRID_SIZE; j++) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
+            for (int j = 0; j < Game.GRID_SIZE; j++) {
                 if (grid[i][j] == Cell.EMPTY) {
                     grid[i][j] = maximizingPlayer ? maxPlayer : minPlayer;
                     int score = maximizingPlayer ? maximize(minPlayer, false).getScore()

@@ -1,12 +1,12 @@
-package tictactoe;
+package tictactoe.players.minimax;
 
-public class Move {
+class Move {
 
     private int score;
     private int row;
     private int column;
 
-    public Move(int score) {
+    Move(int score) {
         this.score = score;
     }
 

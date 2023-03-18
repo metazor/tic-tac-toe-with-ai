@@ -12,7 +12,7 @@ public final class UI {
     void printTable(Cell[][] grid) {
         System.out.println("-".repeat(LINE_LENGTH));
 
-        for (int i = 0; i < Table.GRID_SIZE; i++) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
             System.out.printf("| %s %s %s |%n", grid[i][0].getLabel(), grid[i][1].getLabel(), grid[i][2].getLabel());
         }
 
@@ -43,6 +43,7 @@ public final class UI {
             case "x wins" -> System.out.println("X wins");
             case "o wins" -> System.out.println("O wins");
             case "draw" -> System.out.println("Draw");
+            default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + message);
         }
     }
 
@@ -61,8 +62,8 @@ public final class UI {
             int row = Integer.parseInt(input[0]);
             int column = Integer.parseInt(input[1]);
 
-            if (row < 1 || row > Table.GRID_SIZE || column < 1 || column > Table.GRID_SIZE) {
-                System.out.printf("Coordinates should be from 1 to %d!%n", Table.GRID_SIZE);
+            if (row < 1 || row > Game.GRID_SIZE || column < 1 || column > Game.GRID_SIZE) {
+                System.out.printf("Coordinates should be from 1 to %d!%n", Game.GRID_SIZE);
             } else if (grid[row - 1][column - 1] != Cell.EMPTY) {
                 System.out.println("This cell is occupied! Choose another one!");
             }
@@ -97,7 +98,7 @@ public final class UI {
     private boolean isValidInput(Cell[][] grid, String[] input) {
         int row = Integer.parseInt(input[0]);
         int column = Integer.parseInt(input[1]);
-        return row >= 1 && row <= Table.GRID_SIZE && column >= 1 && column <= Table.GRID_SIZE
+        return row >= 1 && row <= Game.GRID_SIZE && column >= 1 && column <= Game.GRID_SIZE
                && grid[row - 1][column - 1] == Cell.EMPTY;
     }
 }

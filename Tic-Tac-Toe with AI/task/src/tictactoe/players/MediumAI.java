@@ -4,13 +4,14 @@ import tictactoe.Cell;
 import tictactoe.CheckTable;
 import tictactoe.TargetCoordinates;
 
-public class MediumAI extends AbstractPlayer {
+public class MediumAI implements Player {
 
     private final boolean currentRoundIsX;
     private final CheckTable checkTable;
+    private final Cell[][] grid;
 
     public MediumAI(Cell[][] grid, boolean currentRoundIsX) {
-        super(grid);
+        this.grid = grid;
         this.currentRoundIsX = currentRoundIsX;
         checkTable = new CheckTable(grid);
     }
