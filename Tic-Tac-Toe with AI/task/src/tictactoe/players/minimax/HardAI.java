@@ -6,10 +6,12 @@ import tictactoe.Game;
 import tictactoe.TargetCoordinates;
 import tictactoe.players.Player;
 
+import java.util.Arrays;
+
 public class HardAI implements Player {
 
     private final boolean currentRoundIsX;
-    private final Cell[][] grid = new Cell[Game.GRID_SIZE][Game.GRID_SIZE];
+    private Cell[][] grid = new Cell[Game.GRID_SIZE][Game.GRID_SIZE];
     private int bestRow;
     private int bestColumn;
     private Cell maxPlayer;
@@ -22,9 +24,7 @@ public class HardAI implements Player {
     @Override
     public TargetCoordinates makeCoordinates(Cell[][] grid) {
         for (int i = 0; i < Game.GRID_SIZE; i++) {
-            for (int j = 0; j < Game.GRID_SIZE; j++) {
-                this.grid[i][j] = Cell.valueOf(grid[i][j].toString());
-            }
+            this.grid[i] = Arrays.copyOf(grid[i], Game.GRID_SIZE);
         }
 
         if (currentRoundIsX) {
