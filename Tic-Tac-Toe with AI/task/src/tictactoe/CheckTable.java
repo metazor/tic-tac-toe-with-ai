@@ -103,7 +103,7 @@ public class CheckTable {
                 case 0 -> 2;
                 case 1 -> 1;
                 case 2 -> 0;
-                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + emptyCellCoordinate);
+                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE_MESSAGE + emptyCellCoordinate);
             };
         } else if (tableHas2O) {
             sequenceRowO = emptyCellCoordinate;
@@ -112,9 +112,21 @@ public class CheckTable {
                 case 0 -> 2;
                 case 1 -> 1;
                 case 2 -> 0;
-                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + emptyCellCoordinate);
+                default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE_MESSAGE + emptyCellCoordinate);
             };
         }
+    }
+
+    public static boolean hasEmptyCells(Cell[][] grid) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
+            for (int j = 0; j < Game.GRID_SIZE; j++) {
+                if (grid[i][j] == Cell.EMPTY) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean has3X() {

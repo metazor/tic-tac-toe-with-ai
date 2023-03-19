@@ -7,15 +7,13 @@ import tictactoe.UI;
 public class User implements Player {
 
     private final UI ui;
-    private final Cell[][] grid;
 
-    public User(Cell[][] grid, UI ui) {
-        this.grid = grid;
+    public User(UI ui) {
         this.ui = ui;
     }
 
     @Override
-    public TargetCoordinates makeCoordinates() {
+    public TargetCoordinates makeCoordinates(Cell[][] grid) {
         return ui.readCoordinates(grid);
     }
 }

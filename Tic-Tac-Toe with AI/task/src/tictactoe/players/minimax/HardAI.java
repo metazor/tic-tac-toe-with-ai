@@ -9,19 +9,24 @@ import tictactoe.players.Player;
 public class HardAI implements Player {
 
     private final boolean currentRoundIsX;
-    private final Cell[][] grid;
+    private final Cell[][] grid = new Cell[Game.GRID_SIZE][Game.GRID_SIZE];
     private int bestRow;
     private int bestColumn;
     private Cell maxPlayer;
     private Cell minPlayer;
 
-    public HardAI(Cell[][] grid, boolean currentRoundIsX) {
-        this.grid = grid;
+    public HardAI(boolean currentRoundIsX) {
         this.currentRoundIsX = currentRoundIsX;
     }
 
     @Override
-    public TargetCoordinates makeCoordinates() {
+    public TargetCoordinates makeCoordinates(Cell[][] grid) {
+        for (int i = 0; i < Game.GRID_SIZE; i++) {
+            for (int j = 0; j < Game.GRID_SIZE; j++) {
+                this.grid[i][j] = Cell.valueOf(grid[i][j].toString());
+            }
+        }
+
         if (currentRoundIsX) {
             findBestMove(Cell.CROSS);
         } else {
@@ -52,7 +57,7 @@ public class HardAI implements Player {
             return move;
         }
 
-        if (!Game.hasEmptyCells(grid)) {
+        if (!CheckTable.hasEmptyCells(grid)) {
             return move;
         }
 

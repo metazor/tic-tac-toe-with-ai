@@ -6,11 +6,14 @@ import tictactoe.players.minimax.HardAI;
 import tictactoe.players.User;
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class Game {
 
     public static final int GRID_SIZE = 3;
-    static final String UNEXPECTED_VALUE = "Unexpected value: ";
+    public static final RandomGenerator random = new Random();
+    static final String UNEXPECTED_VALUE_MESSAGE = "Unexpected value: ";
     private final UI ui;
     private final Cell[][] grid = new Cell[GRID_SIZE][GRID_SIZE];
     private boolean currentRoundIsX = true;
@@ -35,30 +38,18 @@ public class Game {
             ui.printTable(grid);
             checkTable = new CheckTable(grid);
             currentRoundIsX = !currentRoundIsX;
-        } while (!(checkTable.has3X() || checkTable.has3O() || !hasEmptyCells(grid)));
+        } while (!(checkTable.has3X() || checkTable.has3O() || !CheckTable.hasEmptyCells(grid)));
 
         printEndMessage(checkTable);
     }
 
-    public static boolean hasEmptyCells(Cell[][] grid) {
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                if (grid[i][j] == Cell.EMPTY) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private void makeMove(String playerType) {
         TargetCoordinates targetCoordinates = switch (playerType) {
-            case "user" -> new User(grid, ui).makeCoordinates();
-            case "easy" -> new EasyAI(grid).makeCoordinates();
-            case "medium" -> new MediumAI(grid, currentRoundIsX).makeCoordinates();
-            case "hard" -> new HardAI(grid, currentRoundIsX).makeCoordinates();
-            default -> throw new IllegalStateException(UNEXPECTED_VALUE + playerType);
+            case "user" -> new User(ui).makeCoordinates(grid);
+            case "easy" -> new EasyAI().makeCoordinates(grid);
+            case "medium" -> new MediumAI(currentRoundIsX).makeCoordinates(grid);
+            case "hard" -> new HardAI(currentRoundIsX).makeCoordinates(grid);
+            default -> throw new IllegalStateException(UNEXPECTED_VALUE_MESSAGE + playerType);
         };
 
         if (!"user".equals(playerType)) {
@@ -81,7 +72,7 @@ public class Game {
             ui.printMessage("x wins");
         } else if (checkTable.has3O()) {
             ui.printMessage("o wins");
-        } else if (!hasEmptyCells(grid)) {
+        } else if (!CheckTable.hasEmptyCells(grid)) {
             ui.printMessage("draw");
         }
     }

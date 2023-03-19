@@ -1,8 +1,9 @@
 package tictactoe.players;
 
+import tictactoe.Cell;
 import tictactoe.TargetCoordinates;
 
 public interface Player {
 
-    TargetCoordinates makeCoordinates();
+    TargetCoordinates makeCoordinates(Cell[][] grid);
 }

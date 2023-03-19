@@ -43,7 +43,7 @@ public final class UI {
             case "x wins" -> System.out.println("X wins");
             case "o wins" -> System.out.println("O wins");
             case "draw" -> System.out.println("Draw");
-            default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE + message);
+            default -> throw new IllegalStateException(Game.UNEXPECTED_VALUE_MESSAGE + message);
         }
     }
 
