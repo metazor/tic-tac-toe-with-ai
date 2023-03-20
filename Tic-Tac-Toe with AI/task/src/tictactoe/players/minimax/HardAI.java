@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class HardAI implements Player {
 
     private final boolean currentRoundIsX;
-    private Cell[][] grid = new Cell[Game.GRID_SIZE][Game.GRID_SIZE];
+    private final Cell[][] grid = new Cell[Game.GRID_SIZE][Game.GRID_SIZE];
     private int bestRow;
     private int bestColumn;
     private Cell maxPlayer;
