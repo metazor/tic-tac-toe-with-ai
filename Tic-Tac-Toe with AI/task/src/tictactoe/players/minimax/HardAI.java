@@ -51,13 +51,9 @@ public class HardAI implements Player {
     }
 
     private Move maximize(Cell player, boolean maximizingPlayer) {
-        Move move = maximizingPlayer ? new Move(evaluateTable(player)) : new Move(-evaluateTable(player));
+        Move move = new Move(maximizingPlayer ? evaluateTable(player) : -evaluateTable(player));
 
-        if (move.getScore() != 0) {
-            return move;
-        }
-
-        if (!CheckTable.hasEmptyCells(grid)) {
+        if (move.getScore() != 0 || !CheckTable.hasEmptyCells(grid)) {
             return move;
         }
 
